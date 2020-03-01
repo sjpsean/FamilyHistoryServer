@@ -1,0 +1,17 @@
+1. Model Classes ◀
+2. DAO classes and JUnit tests ◀
+3. Main server with File Handler for serving the Web API test page ◀
+• Needed to test the rest
+---- Server Logger
+4. ◀JSon Serializer (Object Encoder/Decoder)◀ and Web API
+(Handler, Service, Request and Response classes) for
+◀/clear◀,  ◀JUnit◀, need Loggers?
+◀/load◀, ◀JUnit, Loggers
+/user/login, JUnit, Loggers
+/user/register, JUnit, Loggers
+
+work on load.
+** beware of example's column names. figure out how to read those json files?
+
+5. Ancestor generation logic with JUnit Tests
+6. The Rest of the Web API with JUnit Tests

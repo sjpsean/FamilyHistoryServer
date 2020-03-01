@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Sungjin Park/Desktop/CS 240/FamilyMapServerStudent-master/FMS.db" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><current_tab id="0"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="125"/><column_width id="3" width="2091"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="AuthTokens"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="Users">CREATE TABLE Users (
+	UserName varchar(255) not null unique,
+	Password varchar(255) not null,
+	Email varchar(255) not null,
+	FirstName varchar(255) not null,
+	LastName varchar(255) not null,
+	Gender varchar(1) not null,
+	PersonID varchar(255) not null,
+	PRIMARY KEY (UserName)
+	)
+	</sql><sql name="Persons">CREATE TABLE Persons (
+	PersonID varchar(255) not null unique,
+	AssociatedUsername varchar(255) not null, 
+	FirstName varchar(255) not null,
+	LastName varchar(255) not null,
+	Gender varchar(1) not null,
+	FatherID varchar(255),
+	MotherID varchar(255),
+	SpouseID varchar(255),
+	PRIMARY KEY (PersonID)
+	)
+	</sql><sql name="Events">CREATE TABLE Events (
+	EventID varchar(255) not null unique, 
+	AssociatedUsername varchar(255) not null, 
+	PersonID varchar(255) not null, 
+	Latitude float not null, 
+	Longitude float not null, 
+	Country varchar(255) not null, 
+	City varchar(255) not null, 
+	EventType varchar(255) not null, 
+	Year int not null, 
+primary key (EventID)
+)</sql><sql name="AuthTokens">CREATE TABLE AuthTokens (
+	AssociatedUserName varchar(255) not null,
+	Password varchar(255) not null,
+	Token text not null,
+	primary key (Token)
+);</sql><sql name="Insert">INSERT INTO Users (UserName, Password, Email, FirstName, LastName, Gender, PersonID)
+VALUES(&quot;username&quot;,&quot;password&quot;,&quot;email&quot;,&quot;firstname&quot;,&quot;lastname&quot;,&quot;g&quot;,&quot;personid&quot;)
+  </sql><sql name="Delete all row">DELETE FROM Users; DELETE FROM Events</sql><sql name="SQL 9">INSERT INTO Events (EventID, AssociatedUsername, PersonID, Latitude, Longitude, Country, City, EventType, Year) 
+VALUES(&quot;evetd&quot;,&quot;associatedusername&quot;,&quot;personID&quot;,109.2,24.4,&quot;Korea&quot;,&quot;Seoul&quot;,&quot;Birth&quot;,1997)</sql><sql name="SQL 10">SELECT * FROM Users WHERE UserName = &quot;username&quot;</sql><sql name="SQL 1"></sql><current_tab id="8"/></tab_sql></sqlb_project>
