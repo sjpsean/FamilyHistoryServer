@@ -1,9 +1,9 @@
-package GenerateID;
+package Generaters;
 
 /**
  * Generates unique string for personID and eventID
  */
-public class Generate {
+public class GenerateID {
 
   /**
    * Generates a unique ID for a person

@@ -12,10 +12,10 @@ public class RegisterResponse extends MessageResponse {
    * @param personID unique string to point where the family tree starts
    */
   public RegisterResponse(String authToken, String userName, String personID) {
-    super("", true);
-    this.authToken=authToken;
-    this.userName=userName;
-    this.personID=personID;
+    super(null, true);
+    this.authToken = authToken;
+    this.userName = userName;
+    this.personID = personID;
   }
 
   public RegisterResponse(String message, boolean success) {

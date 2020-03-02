@@ -37,9 +37,25 @@ public class LoginService {
    * @return LoginResponse
    */
   public LoginResponse loginUser() throws DataAccessException {
+
+    boolean isRegistered = false;
+    try {
+      Connection conn = db.openConnection();
+      uDAO = new UsersDAO(conn);
+      isRegistered = uDAO.isRegistered(logReq.getUserName(), logReq.getPassword());
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
     try {
       AuthToken token = findUserToken();
-      loginResponse = new LoginResponse(token.getAuthToken(), token.getAssociatedUsername(), getPersonID());
+      if (token != null && isRegistered) {
+        loginResponse = new LoginResponse(token.getAuthToken(), token.getAssociatedUsername(), getPersonID());
+      }
+      else {
+        loginResponse = new LoginResponse("Wrong Username or password", false);
+      }
     } catch (DataAccessException e) {
       e.printStackTrace();
       loginResponse = new LoginResponse(e.getMessage(), false);

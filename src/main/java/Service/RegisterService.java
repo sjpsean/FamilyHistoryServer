@@ -44,7 +44,7 @@ public class RegisterService {
   }
 
   /**
-   * Generate unique token for the user.
+   * GenerateID unique token for the user.
    * @return generated string of token
    */
   private String generateToken() {

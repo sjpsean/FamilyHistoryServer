@@ -1,7 +1,12 @@
 package Service;
 
+import Dao.DataAccessException;
+import Dao.Database;
 import Requests.FillRequest;
+import Response.FillResponse;
 import Response.MessageResponse;
+
+import java.sql.Connection;
 
 /**
  * <pre>
@@ -11,7 +16,9 @@ import Response.MessageResponse;
  * </pre>
  */
 public class FillService {
-  FillRequest fillRequest;
+  private FillRequest fillRequest;
+  private FillResponse fillResponse;
+  private Database db;
 
   /**
    * if there are two parameters with userName and generations, fill in that number of generation.
@@ -19,6 +26,7 @@ public class FillService {
    */
   public FillService(FillRequest fillRequest) {
     this.fillRequest = fillRequest;
+    db = new Database();
   }
 
   /**
@@ -28,7 +36,14 @@ public class FillService {
    * use fillRequest that contains String userName and int generations (optional)
    * @return MessageResponse with a message indicating how many persons and events were added
    */
-  public MessageResponse fill() {
+  public FillResponse fill() throws DataAccessException{
+    try {
+      Connection conn = db.openConnection();
+
+
+    } catch (DataAccessException e) {
+
+    }
     return null;
   }
 

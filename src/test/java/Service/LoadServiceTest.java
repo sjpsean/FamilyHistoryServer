@@ -49,15 +49,14 @@ class LoadServiceTest {
     ResultSet rsUser = null;
     ResultSet rsPerson = null;
     ResultSet rsEvent = null;
-    ResultSet rsToken = null;
     User compareUser = null;
     Person comparePerson = null;
     Event compareEvent = null;
 
     try {
       Connection conn = db.openConnection();
-      LoadRequest loadRequest=new LoadRequest(users, persons, events);
-      LoadService loadService=new LoadService(loadRequest);
+      LoadRequest loadRequest = new LoadRequest(users, persons, events);
+      LoadService loadService = new LoadService(loadRequest);
       loadService.load();
       db.closeConnection(true);
     } catch (DataAccessException e) {

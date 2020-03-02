@@ -581,7 +581,7 @@ public class ServerTest {
         load();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Shut down the server, wait a few seconds, then restart the server. Then press ENTER.");
-        //scanner.nextLine();
+        scanner.nextLine();
         try {
             JsonReader jsonReader = new JsonReader(new FileReader("passoffFiles/LoadData.json"));
             LoadRequest loadRequest = (LoadRequest)GSON.fromJson(jsonReader, LoadRequest.class);

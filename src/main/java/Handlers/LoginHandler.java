@@ -5,9 +5,10 @@ import Handlers.Convert.JsonToObject;
 import Handlers.Convert.ObjectToJson;
 import Handlers.ReadWrite.ReadString;
 import Handlers.ReadWrite.WriteString;
-import Requests.LoadRequest;
-import Response.LoadResponse;
-import Service.LoadService;
+import Requests.LoginRequest;
+import Response.LoginResponse;
+import Service.LoginService;
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -16,9 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
-import static Server.FMSLogger.logger;
-
-public class LoadHandler implements HttpHandler {
+public class LoginHandler implements HttpHandler {
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
@@ -28,25 +27,22 @@ public class LoadHandler implements HttpHandler {
         InputStream reqBody = exchange.getRequestBody();
         String reqData = ReadString.rs(reqBody);
 
-        // ** log the request JSON data // like this?-> logger.info(reqData);
+        // Log the request data
 
-        // convert reqData to object FillRequest to call LoadService.load()
-        LoadRequest loadReq = JsonToObject.jsonToObject(reqData, LoadRequest.class);
-        LoadResponse loadRes = new LoadService(loadReq).load();
-        // convert LoadResponse to Json.
-        String resData = ObjectToJson.objectToJson(loadRes);
+        LoginRequest loginReq = JsonToObject.jsonToObject(reqData, LoginRequest.class);
+        LoginResponse loginRes = new LoginService(loginReq).loginUser();
 
-        // Sending HTTP response to the client.
-        // 1. send status code and any defined headers.
-        // 2. get the response body output stream.
-        // 3. Write json string to the output stream.
-        // 4. close the output stream.
+        String resData = ObjectToJson.objectToJson(loginRes);
+
         exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+        Headers resHeader = exchange.getResponseHeaders();
         OutputStream resBody = exchange.getResponseBody();
         WriteString.ws(resData, resBody);
+        resHeader.set("Authorization", loginRes.getAuthToken());
         resBody.close();
 
         success = true;
+
       }
 
       if (!success) {

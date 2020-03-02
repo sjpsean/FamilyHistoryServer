@@ -7,7 +7,7 @@
 (Handler, Service, Request and Response classes) for
 ◀/clear◀,  ◀JUnit◀, need Loggers?
 ◀/load◀, ◀JUnit, Loggers
-/user/login, JUnit, Loggers
+◀/user/login◀, ◀JUnit◀, Loggers
 /user/register, JUnit, Loggers
 
 work on load.
