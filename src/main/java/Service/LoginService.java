@@ -42,7 +42,7 @@ public class LoginService {
     try {
       Connection conn = db.openConnection();
       uDAO = new UsersDAO(conn);
-      isRegistered = uDAO.isRegistered(logReq.getUserName(), logReq.getPassword());
+      isRegistered = uDAO.isRegistered(logReq.getUserName());
       db.closeConnection(true);
     } catch (DataAccessException e) {
       db.closeConnection(false);

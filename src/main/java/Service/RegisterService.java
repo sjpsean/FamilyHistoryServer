@@ -1,11 +1,17 @@
 package Service;
 
 import Dao.AuthTokenDAO;
+import Dao.DataAccessException;
+import Dao.Database;
+import Dao.UsersDAO;
+import Generaters.GenerateID;
 import Model.AuthToken;
 import Model.Person;
 import Model.User;
 import Requests.RegisterRequest;
 import Response.RegisterResponse;
+
+import java.sql.Connection;
 
 /**
  * <pre>
@@ -15,13 +21,16 @@ import Response.RegisterResponse;
  */
 public class RegisterService {
   private RegisterRequest regReq;
+  private RegisterResponse regRes;
+  private Database db;
 
   /**
    * Receive register request data from the user and process registration to return response.
    * @param regReq RegisterRequest came from RequestHandler
    */
-  public RegisterService(RegisterRequest regReq) {
-    this.regReq=regReq;
+  public RegisterService (RegisterRequest regReq) {
+    this.regReq = regReq;
+    db = new Database();
   }
 
 
@@ -30,59 +39,101 @@ public class RegisterService {
    * if something goes wrong, throw an error
    * @return RegisterResponse
    */
-  public RegisterResponse registerUser() {
-    return null;
+  public RegisterResponse registerUser() throws DataAccessException {
+    boolean isRegistered = false;
+    boolean success = false;
+    String personID;
+    String token = "";
+
+    /*
+    1. check if it's registered
+        if it is -> return error message "Already registered", success:false;
+    2. check if it's valid.
+        checkValid function
+    3. if check valid,
+        generate personID and authToken
+        personID = username _ lastname
+        authToken = random generated string
+          UserDAO.create(User newUser);
+     */
+    if (isRegistered() || !checkValid()) {
+      return regRes;
+    }
+
+    personID = regReq.getUserName() + "_" + regReq.getLastName();
+    token = GenerateID.generateToken();
+
+    User newUser = new User(regReq.getUserName(), regReq.getPassWord(), regReq.getEmail(), regReq.getFirstName(), regReq.getLastName(), regReq.getGender(), personID);
+    AuthToken newToken = new AuthToken(token, regReq.getUserName(), regReq.getPassWord());
+
+    try {
+      Connection conn = db.openConnection();
+      UsersDAO uDAO = new UsersDAO(conn);
+      AuthTokenDAO aDAO = new AuthTokenDAO(conn);
+
+      uDAO.create(newUser);
+      aDAO.create(newToken);
+
+      db.closeConnection(true);
+      regRes = new RegisterResponse(token, regReq.getUserName(), personID);
+    } catch (DataAccessException e) {
+      e.printStackTrace();
+      db.closeConnection(false);
+      regRes = new RegisterResponse(e.getMessage(), false);
+    }
+
+    return regRes;
+  }
+
+  private boolean isRegistered() throws DataAccessException {
+    boolean isReg = false;
+    try {
+      Connection conn = db.openConnection();
+      UsersDAO uDAO = new UsersDAO(conn);
+      isReg = uDAO.isRegistered(regReq.getUserName());
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+      throw new DataAccessException(e.getMessage());
+    }
+    if (isReg) {
+      regRes = new RegisterResponse("This username is already registered in our server.", false);
+    }
+    return isReg;
   }
 
   /**
    * if the request missing or have invalid value, username already taken by another user, internal server error,
    * throws the right exception if it is not valid.
-   * @param regReq registerRequest
    */
-  public void checkValid(RegisterRequest regReq) {
-    throw null;
-  }
-
-  /**
-   * GenerateID unique token for the user.
-   * @return generated string of token
-   */
-  private String generateToken() {
-    return null;
-  }
-
-  /**
-   * Fill in User object to use it in calling UsersDAO.
-   * @return User object filled with information needed
-   */
-  private User makeUserObject() {
-    return null;
-  }
-
-  /**
-   * Fill in AuthToken object for to use it in calling AuthTokenDAO.
-   * @return AuthToken object filled with information needed
-   */
-  private AuthToken makeAuthToken() {
-    return null;
-  }
-
-  /**
-   * use UsersDAO to create a user in the table.
-   * @param user the User object that has been created by makeUserObject()
-   */
-  private void createUser (User user) {
-//    UsersDAO usersDAO = new UsersDAO();
-//    usersDAO.create(user);
-  }
-
-  /**
-   * use AuthTokenDAO to create a authToken in the table.
-   * @param authToken the AuthToken object that has been created by makeAuthToken()
-   */
-  private void createAuthToken (AuthToken authToken) {
-//    AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
-//    authTokenDAO.create(authToken);
+  private boolean checkValid() {
+    if (regReq.getUserName().isEmpty()) {
+      regRes = new RegisterResponse("Username cannot be empty.", false);
+      return false;
+    }
+    else if (regReq.getPassWord().isEmpty()) {
+      regRes = new RegisterResponse("Password cannot be empty.", false);
+      return false;
+    }
+    else if (regReq.getEmail().isEmpty()) {
+      regRes = new RegisterResponse("Email address cannot be empty.", false);
+      return false;
+    }
+    else if (regReq.getFirstName().isEmpty()) {
+      regRes = new RegisterResponse("First name cannot be empty.", false);
+      return false;
+    }
+    else if (regReq.getLastName().isEmpty()) {
+      regRes = new RegisterResponse("Last name cannot be empty.", false);
+      return false;
+    }
+    else if (regReq.getGender().isEmpty()) {
+      regRes = new RegisterResponse("Gender cannot be empty.", false);
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
   /**

@@ -42,7 +42,6 @@ public class LoginHandler implements HttpHandler {
         resBody.close();
 
         success = true;
-
       }
 
       if (!success) {

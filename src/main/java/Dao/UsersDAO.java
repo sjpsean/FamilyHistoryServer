@@ -102,12 +102,11 @@ public class UsersDAO {
    * @param userName unique userName for the user
    * @return true if it can find the name, false if not
    */
-  public boolean isRegistered(String userName, String password) throws DataAccessException {
+  public boolean isRegistered(String userName) throws DataAccessException {
     ResultSet rs = null;
-    String sql = "SELECT * FROM Users WHERE UserName = ? AND  Password = ?";
+    String sql = "SELECT * FROM Users WHERE UserName = ?";
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
       stmt.setString(1, userName);
-      stmt.setString(2, password);
       rs = stmt.executeQuery();
       if (rs.next()) {
         return true;

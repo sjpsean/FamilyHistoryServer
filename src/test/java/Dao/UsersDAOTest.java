@@ -186,7 +186,7 @@ public class UsersDAOTest {
       UsersDAO uDAO = new UsersDAO(conn);
 
       uDAO.create(userSample);
-      isRegistered = uDAO.isRegistered(userSample.getUserName(), userSample.getPassword());
+      isRegistered = uDAO.isRegistered(userSample.getUserName());
       db.closeConnection(true);
     } catch (DataAccessException e) {
       db.closeConnection(false);
@@ -203,20 +203,7 @@ public class UsersDAOTest {
       UsersDAO uDAO = new UsersDAO(conn);
 
       uDAO.create(userSample);
-      isRegistered = uDAO.isRegistered(userSample.getUserName(), "notthatpassword");
-      db.closeConnection(true);
-    } catch (DataAccessException e) {
-      db.closeConnection(false);
-    }
-
-    assertFalse(isRegistered);
-
-    isRegistered = true;
-    try {
-      Connection conn = db.openConnection();
-      UsersDAO uDAO = new UsersDAO(conn);
-
-      isRegistered = uDAO.isRegistered("notthisuser", userSample.getPassword());
+      isRegistered = uDAO.isRegistered("notRegisteredName");
       db.closeConnection(true);
     } catch (DataAccessException e) {
       db.closeConnection(false);
