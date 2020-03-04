@@ -99,7 +99,7 @@ public class Server {
     server.createContext("/user/login", new LoginHandler());
     server.createContext("/user/register", new RegisterHandler());
     server.createContext("/clear", new ClearHandler());
-    server.createContext("/fill");  // what kind of path I need to use for username and generation?
+    server.createContext("/fill/", new FillHandler());  // what kind of path I need to use for username and generation?
     server.createContext("/load", new LoadHandler());
     server.createContext("/person");
 

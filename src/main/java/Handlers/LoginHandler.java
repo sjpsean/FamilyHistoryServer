@@ -27,7 +27,7 @@ public class LoginHandler implements HttpHandler {
         InputStream reqBody = exchange.getRequestBody();
         String reqData = ReadString.rs(reqBody);
 
-        // Log the request data
+        // Log the request data using logger
 
         LoginRequest loginReq = JsonToObject.jsonToObject(reqData, LoginRequest.class);
         LoginResponse loginRes = new LoginService(loginReq).loginUser();

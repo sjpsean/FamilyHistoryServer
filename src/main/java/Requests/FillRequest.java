@@ -26,11 +26,12 @@ public class FillRequest {
     this.generations = generations;
   }
 
+  public String getUserName() {
+    return userName;
+  }
+
   public int getGenerations() {
     return generations;
   }
 
-  public void setGenerations(int generations) {
-    this.generations = generations;
-  }
 }

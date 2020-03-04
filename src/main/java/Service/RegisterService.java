@@ -4,7 +4,7 @@ import Dao.AuthTokenDAO;
 import Dao.DataAccessException;
 import Dao.Database;
 import Dao.UsersDAO;
-import Generaters.GenerateID;
+import Generators.GenerateID;
 import Model.AuthToken;
 import Model.Person;
 import Model.User;
@@ -43,24 +43,13 @@ public class RegisterService {
     boolean isRegistered = false;
     boolean success = false;
     String personID;
-    String token = "";
+    String token = null;
 
-    /*
-    1. check if it's registered
-        if it is -> return error message "Already registered", success:false;
-    2. check if it's valid.
-        checkValid function
-    3. if check valid,
-        generate personID and authToken
-        personID = username _ lastname
-        authToken = random generated string
-          UserDAO.create(User newUser);
-     */
     if (isRegistered() || !checkValid()) {
       return regRes;
     }
 
-    personID = regReq.getUserName() + "_" + regReq.getLastName();
+    personID = GenerateID.generatePersonID();
     token = GenerateID.generateToken();
 
     User newUser = new User(regReq.getUserName(), regReq.getPassWord(), regReq.getEmail(), regReq.getFirstName(), regReq.getLastName(), regReq.getGender(), personID);

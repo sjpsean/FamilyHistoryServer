@@ -60,4 +60,125 @@ class RegisterServiceTest {
     assertNotNull(compareToken);
     assertEquals(compareToken.getAuthToken(), regRes.getAuthToken());
   }
+
+  @Test
+  void registerUserFail() throws Exception {
+    RegisterResponse regRes = null;
+    RegisterRequest regReq = null;
+
+    // try inserting user with no username.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("", "park", "sean@park", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user with no password.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "", "sean@park", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user with no password.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "", "sean@park", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user with no email.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "password", "", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user with no first or last name.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "password", "sean@park", "", "", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user with no gender.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "password", "sean@park", "Sean", "Park", "");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+
+    regRes = null;
+    // try inserting user that is already Registered.
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "password", "sean@park", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    regRes = null;
+    try {
+      Connection conn = db.openConnection();
+      regReq = new RegisterRequest("username", "password", "sean@park", "Sean", "Park", "m");
+      RegisterService regService = new RegisterService(regReq);
+      regRes = regService.registerUser();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(regRes);
+    assertFalse(regRes.isSuccess());
+  }
 }

@@ -1,4 +1,4 @@
-package Generaters;
+package Generators;
 
 import java.util.UUID;
 
@@ -12,7 +12,7 @@ public class GenerateID {
    * @return unique String ID
    */
   public static String generatePersonID() {
-    return null;
+    return UUID.randomUUID().toString().substring(0,10);
   }
 
   /**

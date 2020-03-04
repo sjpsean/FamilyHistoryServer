@@ -1,0 +1,71 @@
+
+class Fill () {
+
+    private FillRequest;
+    private int num = 0;
+
+    Fill (fillReq) {
+        this.fillReq = fillReq;
+        Connection conn;
+        Database;
+
+    }
+
+    public fill() {
+        Person person = new Person(); // for user.
+        generatePerson(username); // generate person for user.
+        generateEvent(EventType, username); // generate event for user.
+
+        this.conn = Open connection
+
+        makeParents
+        close connection
+
+
+    }
+
+    private void makeParents(Person child) {
+        if (n == fillReq.getGenerationNumber()) return;
+        Person mom = new Person (child.getMotherID //child's mom's ID becomes this person's id.
+                                 fillReq.getUsername(), //associatedUsername has to be the same for all members in the tree.
+                                 randomFemaleName // first name.
+                                 randomSurname // Last name.
+                                 randomID // momID.
+                                 randomID // dadID.
+                                 child.DadID // spouseID.
+        Person dad = new Person ( do the same );
+        try
+        Connection conn = open
+        PersonDAO pDAO = new PersonDAO(conn);
+        pDAO.create(mom);
+        pDAO.create(dad);
+        db.close(true);
+        catch
+        db.close(false);
+
+        makeEvent(mom, dad);
+        num++; // every time you make mom and dad you increase num by one to count what generation you are working on.
+
+        makeParents (mom);
+        makeParents (dad);
+        num--; // when you are done with both mom and dad side, you decrease the generation before you go up the generation.
+        return;
+
+    }
+
+    private void makeEvent (Person mom, Person dad) {
+
+        try
+
+        catch
+    }
+
+    private boolean checkValid(Event);
+
+    private boolean isRegistered()
+
+    private int generateAge -> generators.
+
+    // when making a Event of "Marriage", put it in an Location marriageLocation; and assign marriageEvent to dad and mom.
+
+}
