@@ -18,8 +18,7 @@ import java.sql.Connection;
  */
 public class LoginService {
   private LoginRequest logReq;
-  private LoginResponse logRes;
-  LoginResponse loginResponse;
+  LoginResponse loginRes;
   private Database db;
   private UsersDAO uDAO;
 
@@ -47,20 +46,19 @@ public class LoginService {
     } catch (DataAccessException e) {
       db.closeConnection(false);
     }
-
-    try {
-      AuthToken token = findUserToken();
-      if (token != null && isRegistered) {
-        loginResponse = new LoginResponse(token.getAuthToken(), token.getAssociatedUsername(), getPersonID());
-      }
-      else {
-        loginResponse = new LoginResponse("Wrong Username or password", false);
-      }
-    } catch (DataAccessException e) {
-      e.printStackTrace();
-      loginResponse = new LoginResponse(e.getMessage(), false);
+    AuthToken token = findUserToken();
+    if (token == null) {
+      loginRes = new LoginResponse("Error: token not found", false);
+      return loginRes;
     }
-    return loginResponse;
+    if (!token.getPassword().equals(logReq.getPassword())) {
+      loginRes = new LoginResponse("Error: Wrong password", false);
+      return loginRes;
+    }
+    if (isRegistered) {
+      loginRes = new LoginResponse(token.getAuthToken(), token.getAssociatedUsername(), getPersonID());
+    } else loginRes = new LoginResponse("Error: Wrong Username or password", false);
+    return loginRes;
   }
 
   /**
@@ -69,12 +67,11 @@ public class LoginService {
    * @return AuthToken data for the user
    */
   private AuthToken findUserToken() throws DataAccessException {
-    AuthToken token = null;
+    AuthToken token;
     try {
       Connection conn = db.openConnection();
       AuthTokenDAO aDAO = new AuthTokenDAO(conn);
       token = aDAO.getTokenByUserName(logReq.getUserName());
-
       db.closeConnection(true);
     } catch (DataAccessException e) {
       db.closeConnection(false);
@@ -89,7 +86,7 @@ public class LoginService {
    * @return personID of the user
    */
   private String getPersonID() throws DataAccessException {
-    String personID = null;
+    String personID;
     try {
       Connection conn = db.openConnection();
       uDAO = new UsersDAO(conn);

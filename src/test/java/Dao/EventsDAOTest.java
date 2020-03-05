@@ -86,61 +86,78 @@ public class EventsDAOTest {
   }
 
   @Test
-  void getEventsByUserNamePass() throws DataAccessException {
-    Event eventSample2 = new Event ("eventID2","SeanPark","personID1", 12.34f,56.78f,
-            "Korea","Seoul","Birth",1997);
-    Event eventSample3 = new Event ("eventID3","BrentPark","personID1", 12.34f,56.78f,
-            "Korea","Seoul","Birth",1997);
-    Event[] compareEvent = null;
-
+  void getEventByIDFail() throws DataAccessException {
+    Event compareEvent = null;
     try {
       Connection conn = db.openConnection();
       EventsDAO eDAO = new EventsDAO(conn);
 
       eDAO.create(eventSample);
-      eDAO.create(eventSample2);
-      eDAO.create(eventSample3);
-      compareEvent = eDAO.getEventsByUserName(eventSample.getAssociatedUsername());
-
-      db.closeConnection(true);
-    } catch (DataAccessException e) {
-      db.closeConnection(false);
-    }
-
-    assertNotNull(compareEvent);
-    assertEquals(compareEvent.length, 2);
-    assertEquals(compareEvent[0], eventSample);
-    assertEquals(compareEvent[1], eventSample2);
-  }
-
-  @Test
-  void deleteByUserNamePass() throws DataAccessException {
-    Event eventSample2 = new Event ("eventID2","SeanPark","personID1", 12.34f,56.78f,
-            "Korea","Seoul","Birth",1997);
-    Event eventSample3 = new Event ("eventID3","BrentPark","personID1", 12.34f,56.78f,
-            "Korea","Seoul","Birth",1997);
-    Event[] compareEvent = null;
-    Event[] notDeletedEvent = null;
-
-    try {
-      Connection conn = db.openConnection();
-      EventsDAO eDAO = new EventsDAO(conn);
-
-      eDAO.create(eventSample);
-      eDAO.create(eventSample2);
-      eDAO.create(eventSample3);
-      eDAO.deleteByUserName(eventSample.getAssociatedUsername());
-      compareEvent = eDAO.getEventsByUserName(eventSample.getAssociatedUsername());
-      notDeletedEvent = eDAO.getEventsByUserName(eventSample3.getAssociatedUsername());
-
+      compareEvent = eDAO.getEventByID("thisisnotid");
       db.closeConnection(true);
     } catch (DataAccessException e) {
       db.closeConnection(false);
     }
 
     assertNull(compareEvent);
-    assertNotNull(notDeletedEvent);
-    assertEquals(notDeletedEvent[0], eventSample3);
+  }
+
+  @Test
+  void getEventsByIDPass() throws Exception {
+    Event[] events = null;
+    Event eventSample2 = new Event ("eventID2","SeanPark","personID1", 12.34f,56.78f,
+            "Korea","Seoul","Birth",1997);
+    Event eventSample3 = new Event ("eventID3","SeanPark","personID3", 12.34f,56.78f,
+            "Korea","Seoul","Birth",1997);
+
+    try {
+      Connection conn = db.openConnection();
+      EventsDAO eDAO = new EventsDAO(conn);
+      eDAO.create(eventSample);
+      eDAO.create(eventSample2);
+      eDAO.create(eventSample3);
+      db.closeConnection(true);
+    } catch (DataAccessException e ) {
+      db.closeConnection(false);
+    }
+
+    try {
+      Connection conn = db.openConnection();
+      EventsDAO eDAO = new EventsDAO(conn);
+      events = eDAO.getEventsByPersonID("personID1");
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(events);
+    assertEquals(events[0], eventSample);
+    assertEquals(events[1], eventSample2);
+  }
+
+  @Test
+  void getEventsByIDFail() throws Exception {
+    Event[] events = { eventSample };
+
+    try {
+      Connection conn = db.openConnection();
+      EventsDAO eDAO = new EventsDAO(conn);
+      eDAO.create(eventSample);
+      db.closeConnection(true);
+    } catch (DataAccessException e ) {
+      db.closeConnection(false);
+    }
+
+    try {
+      Connection conn = db.openConnection();
+      EventsDAO eDAO = new EventsDAO(conn);
+      events = eDAO.getEventsByPersonID("thisisnotvalid");
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNull(events);
   }
 
   @Test

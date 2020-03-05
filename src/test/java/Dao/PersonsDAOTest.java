@@ -16,7 +16,7 @@ public class PersonsDAOTest {
   @BeforeEach
   public void setUp() throws Exception {
     db = new Database();
-    personSample = new Person("person123ID", "Sean", "Sean", "Park", "m",
+    personSample = new Person("Sean", "person123ID", "Sean", "Park", "m",
             "fatherParkID", "motherParkID", "SeanSpouseID");
   }
 
@@ -106,7 +106,7 @@ public class PersonsDAOTest {
     assertTrue(isEqual);
 
     // check if two different personID will get different Persons.
-    Person personSample2 = new Person("person456ID", "Sez", "Sez", "Park", "m",
+    Person personSample2 = new Person("Sez", "person456ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
     isEqual = false;
     try {
@@ -157,9 +157,9 @@ public class PersonsDAOTest {
 
   @Test
   void getPersonsByUserNamePass() throws DataAccessException {
-    Person personSample2 = new Person("person456ID", "Sean", "Sez", "Park", "m",
+    Person personSample2 = new Person("Sean", "person456ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
-    Person personSample3 = new Person("person789ID", "Sez", "Sez", "Park", "m",
+    Person personSample3 = new Person("Sez", "person789ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
     Person[] comparePerson = null;
 
@@ -186,9 +186,9 @@ public class PersonsDAOTest {
 
   @Test
   void deleteByUserNamePass() throws DataAccessException {
-    Person personSample2 = new Person("person456ID", "Sean", "Sez", "Park", "m",
+    Person personSample2 = new Person("Sean", "person456ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
-    Person personSample3 = new Person("person789ID", "Sez", "Sez", "Park", "m",
+    Person personSample3 = new Person("Sez", "person789ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
     Person[] comparePerson = null;
     Person[] notDeletedPerson = null;
@@ -219,7 +219,7 @@ public class PersonsDAOTest {
   void deleteAllPass() throws Exception {
     ResultSet rs = null;
     boolean isEmpty = false;
-    Person personSample2 = new Person("person456ID", "Sez", "Sez", "Park", "m",
+    Person personSample2 = new Person("Sez", "person456ID", "Sez", "Park", "m",
             "faParkID", "moParkID", "SeSpouseID");
     try {
       Connection conn = db.openConnection();

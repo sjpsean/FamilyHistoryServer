@@ -91,21 +91,22 @@ public class Server {
     // System.out.println("Creating contexts");
     logger.info("Creating contexts");
 
-    /**
+    /*
      * Create and install the HTTP handler for the URL paths
      * When the HttpServer receives an HTTP request containing path, it will forward the request to that handler.
      */
-    server.createContext("/", new Handlers.FileHandler());
     server.createContext("/user/login", new LoginHandler());
     server.createContext("/user/register", new RegisterHandler());
     server.createContext("/clear", new ClearHandler());
-    server.createContext("/fill/", new FillHandler());  // what kind of path I need to use for username and generation?
+    server.createContext("/fill", new FillHandler());  // what kind of path I need to use for username and generation?
     server.createContext("/load", new LoadHandler());
-    server.createContext("/person");
+    server.createContext("/person", new PersonHandler());
+    server.createContext("/event", new EventHandler());
+    server.createContext("/", new Handlers.FileHandler());
 
     // Log message indicating that the HttpServer is about the start accepting
     // incoming client connections.
-//    System.out.println("Starting server");
+    System.out.println("Starting server");
     logger.info("Starting HTTP server");
     // Tells the HttpServer to start accepting incoming client connections.
     // This method call will return immediately, and the "main" method

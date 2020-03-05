@@ -55,6 +55,23 @@ public class AuthTokenDAO {
     return null;
   }
 
+  public String getUsernameByToken (String token) throws DataAccessException {
+    AuthToken authToken;
+    ResultSet rs = null;
+    String sql = "SELECT * FROM AuthTokens WHERE Token = ?;";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, token);
+      rs = stmt.executeQuery();
+      if (rs.next()) {
+        return rs.getString("AssociatedUsername");
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("Error encountered while finding token for username");
+    }
+    return null;
+  }
+
   /**
    * delete all tokens related to this userName
    * @param userName user's name :String

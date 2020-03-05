@@ -35,12 +35,19 @@ public class RegisterHandler implements HttpHandler {
 
         String resData = ObjectToJson.objectToJson(regRes);
 
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-        Headers resHeader = exchange.getResponseHeaders();
-        OutputStream resBody = exchange.getResponseBody();
-        WriteString.ws(resData, resBody);
-        resHeader.set("Authorization", regRes.getAuthToken());
-        resBody.close();
+        if (regRes.isSuccess()) {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+    //      Headers resHeader = exchange.getResponseHeaders();
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+   //       resHeader.set("Authorization", regRes.getAuthToken());
+          resBody.close();
+        } else {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+          resBody.close();
+        }
 
         success = true;
       }

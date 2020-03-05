@@ -6,7 +6,6 @@ import Handlers.ReadWrite.*;
 import Requests.FillRequest;
 import Response.FillResponse;
 import Service.FillService;
-import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -40,21 +39,20 @@ public class FillHandler implements HttpHandler {
         }
 
         // check if it's valid uri to create a request.
-        if (userName == null || userName.equals("") || genNum < 1) {
-          throw new IOException("your URI path is not valid for fill request");
+        if (userName != null || genNum > 0) {
+          // create a fill request.
+          FillRequest fillReq = new FillRequest(userName, genNum);
+          FillResponse fillRes = new FillService(fillReq).fill();
+
+          String resData = ObjectToJson.objectToJson(fillRes);
+
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+          resBody.close();
+
+          success = true;
         }
-        // create a fill request.
-        FillRequest fillReq = new FillRequest(userName, genNum);
-        FillResponse fillRes = new FillService(fillReq).fill();
-
-        String resData = ObjectToJson.objectToJson(fillRes);
-
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-        OutputStream resBody = exchange.getResponseBody();
-        WriteString.ws(resData, resBody);
-        resBody.close();
-
-        success = true;
       }
 
       if (!success) {

@@ -71,18 +71,18 @@ public class EventsDAO {
 
   /**
    * Get Events that contains a specific username.
-   * @param userName unique string
+   * @param personID unique string
    * @return Array of Event
    */
-  public Event[] getEventsByUserName(String userName) throws DataAccessException{
+  public Event[] getEventsByPersonID(String personID) throws DataAccessException{
     ResultSet rs = null;
     ArrayList<Event> eventsList = new ArrayList<Event>();
     Event[] events = null;
     Event event;
-    String sql = "SELECT * FROM Events WHERE AssociatedUsername = ?;";
+    String sql = "SELECT * FROM Events WHERE PersonID = ?;";
 
     try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-      stmt.setString(1, userName);
+      stmt.setString(1, personID);
       rs = stmt.executeQuery();
       while (rs.next()) {
         event = new Event (rs.getString("EventID"), rs.getString("AssociatedUsername"),
@@ -98,6 +98,37 @@ public class EventsDAO {
       for (int i = 0; i < eventsList.size(); i++) {
         events[i] = eventsList.get(i);
 //        System.out.println(events[i].toString());
+      }
+      return events;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DataAccessException("SQL Error encountered while getting events by username");
+    }
+  }
+
+  public Event[] getEventsByUsername(String username) throws DataAccessException{
+    ResultSet rs = null;
+    ArrayList<Event> eventsList = new ArrayList<Event>();
+    Event[] events = null;
+    Event event;
+    String sql = "SELECT * FROM Events WHERE AssociatedUsername = ?;";
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      stmt.setString(1, username);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        event = new Event (rs.getString("EventID"), rs.getString("AssociatedUsername"),
+                rs.getString("PersonID"), rs.getFloat("Latitude"),rs.getFloat("Longitude"),
+                rs.getString("Country"), rs.getString("City"),
+                rs.getString("EventType"), rs.getInt("Year"));
+        eventsList.add(event);
+      }
+
+      if (eventsList.isEmpty()) return null;
+
+      events = new Event[eventsList.size()];
+      for (int i = 0; i < eventsList.size(); i++) {
+        events[i] = eventsList.get(i);
       }
       return events;
     } catch (SQLException e) {

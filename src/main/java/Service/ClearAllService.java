@@ -19,21 +19,11 @@ public class ClearAllService {
     ClearResponse clearResponse;
     Database db = new Database();
     try {
-      Connection conn = db.openConnection();
-      // call all DAO's
-      UsersDAO uDAO = new UsersDAO(conn);
-      PersonsDAO pDAO = new PersonsDAO(conn);
-      EventsDAO eDAO = new EventsDAO(conn);
-      AuthTokenDAO aDAO = new AuthTokenDAO(conn);
-      // call deleteAll functions from all DAO's
-      uDAO.deleteAll();
-      pDAO.deleteAll();
-      eDAO.deleteAll();
-      aDAO.deleteAll();
+      if (db.getConnection() != null) db.openConnection();
+      db.clearTables();
+      clearResponse = new ClearResponse("clear succeeded", true);
       db.closeConnection(true);
-      clearResponse = new ClearResponse("Clear succeeded", true);
     } catch (DataAccessException e) {
-      e.printStackTrace();
       db.closeConnection(false);
       clearResponse = new ClearResponse(e.getMessage(), false);
     }

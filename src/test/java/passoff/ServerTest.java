@@ -574,7 +574,7 @@ public class ServerTest {
         }
     }
 
-    @Test
+   // @Test
     @DisplayName("Persistence Test")
     public void testPersistence(TestInfo paramTestInfo) throws Client.ServerConnectionException {
         printTestName(paramTestInfo);

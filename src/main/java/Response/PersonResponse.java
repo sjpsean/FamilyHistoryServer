@@ -3,25 +3,25 @@ package Response;
 import Model.Person;
 
 public class PersonResponse extends MessageResponse {
-  Person[] personsList = null;
+  Person[] data = null;
   Person person = null;
 
-  PersonResponse(Person[] personsList) {
-    super("", true);
-    this.personsList = personsList;
+  public PersonResponse(Person[] personsList) {
+    super(null, true);
+    this.data = personsList;
   }
 
-  PersonResponse(Person person) {
-    super("", true);
+  public PersonResponse(Person person) {
+    super(null, true);
     this.person = person;
   }
 
-  PersonResponse(String message, boolean success) {
+  public PersonResponse(String message, boolean success) {
     super(message, success);
   }
 
   public Person[] getPersonsList() {
-    return personsList;
+    return data;
   }
 
   public Person getPerson() {

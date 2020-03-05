@@ -1,6 +1,7 @@
 package Service;
 
 import Dao.*;
+import Generators.GenerateID;
 import Model.*;
 import Requests.LoadRequest;
 import Response.LoadResponse;
@@ -33,21 +34,28 @@ public class LoadService {
   public LoadResponse load() throws DataAccessException {
     LoadResponse loadResponse;
     Database db = new Database();
+
+    if (!checkVaild()) {
+      return new LoadResponse("Error: There are no values to load", false);
+    }
+
     try {
-      Connection conn = db.openConnection();
-      UsersDAO uDAO = new UsersDAO(conn);
-      PersonsDAO pDAO = new PersonsDAO(conn);
-      EventsDAO eDAO = new EventsDAO(conn);
-      AuthTokenDAO aDAO = new AuthTokenDAO(conn);
+      Connection conn=db.openConnection();
+      db.clearTables();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
 
-      // First delete all data from the database.
-      uDAO.deleteAll();
-      pDAO.deleteAll();
-      eDAO.deleteAll();
-      aDAO.deleteAll();
-
+    try {
+      Connection conn=db.openConnection();
+      UsersDAO uDAO=new UsersDAO(conn);
+      PersonsDAO pDAO=new PersonsDAO(conn);
+      EventsDAO eDAO=new EventsDAO(conn);
+      AuthTokenDAO aDAO=new AuthTokenDAO(conn);
       for (User user : loadRequest.getUsers()) {
         uDAO.create(user);
+        aDAO.create(new AuthToken(GenerateID.generateToken(), user.getUserName(), user.getPassword()));
       }
       for (Person person : loadRequest.getPersons()) {
         pDAO.create(person);
@@ -64,6 +72,22 @@ public class LoadService {
     }
 
     return loadResponse;
+  }
+
+  private boolean checkVaild () {
+    if (loadRequest.getEvents() == null
+    || loadRequest.getPersons() == null
+    || loadRequest.getUsers() == null) {
+      return false;
+    }
+
+    if (loadRequest.getEvents().length == 0
+    && loadRequest.getPersons().length == 0
+    && loadRequest.getUsers().length == 0) {
+      return false;
+    }
+
+    return true;
   }
 
   private String MessageBuilder () {

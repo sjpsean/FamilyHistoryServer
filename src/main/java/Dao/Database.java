@@ -42,7 +42,7 @@ public class Database {
       conn = null;
     } catch (SQLException e) {
       e.printStackTrace();
-      throw new DataAccessException("Unable to close database connection");
+      throw new DataAccessException("Error: Unable to close database connection");
     }
   }
 

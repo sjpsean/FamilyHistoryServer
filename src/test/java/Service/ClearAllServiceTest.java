@@ -25,7 +25,7 @@ class ClearAllServiceTest {
     db = new Database();
     userSample = new User("Sean", "seanpassword", "seanpark@gmail.com",
             "Sean", "Park", "m", "personid123");
-    personSample = new Person("person123ID", "Sean", "Sean", "Park", "m",
+    personSample = new Person("Sean", "person123ID", "Sean", "Park", "m",
             "fatherParkID", "motherParkID", "SeanSpouseID");
     eventSample = new Event ("eventID","SeanPark","personID1", 12.34f,56.78f,
             "Korea","Seoul","Birth",1997);

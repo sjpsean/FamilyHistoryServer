@@ -36,15 +36,25 @@ public class LoadHandler implements HttpHandler {
         // convert LoadResponse to Json.
         String resData = ObjectToJson.objectToJson(loadRes);
 
+        if (loadRes.isSuccess()) {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+          resBody.close();
+        }
+        else {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+          resBody.close();
+        }
+
         // Sending HTTP response to the client.
         // 1. send status code and any defined headers.
         // 2. get the response body output stream.
         // 3. Write json string to the output stream.
         // 4. close the output stream.
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-        OutputStream resBody = exchange.getResponseBody();
-        WriteString.ws(resData, resBody);
-        resBody.close();
+
 
         success = true;
       }

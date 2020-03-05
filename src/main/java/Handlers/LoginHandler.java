@@ -21,32 +21,32 @@ public class LoginHandler implements HttpHandler {
 
   @Override
   public void handle(HttpExchange exchange) throws IOException {
-    boolean success = false;
     try {
       if (exchange.getRequestMethod().toLowerCase().equals("post")) {
         InputStream reqBody = exchange.getRequestBody();
         String reqData = ReadString.rs(reqBody);
 
-        // Log the request data using logger
+        // Log the request data
 
         LoginRequest loginReq = JsonToObject.jsonToObject(reqData, LoginRequest.class);
         LoginResponse loginRes = new LoginService(loginReq).loginUser();
 
         String resData = ObjectToJson.objectToJson(loginRes);
 
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-        Headers resHeader = exchange.getResponseHeaders();
-        OutputStream resBody = exchange.getResponseBody();
-        WriteString.ws(resData, resBody);
-        resHeader.set("Authorization", loginRes.getAuthToken());
-        resBody.close();
-
-        success = true;
-      }
-
-      if (!success) {
-        exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
-        exchange.getResponseBody().close();
+        if (loginRes.isSuccess()) {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+   //       Headers resHeader=exchange.getResponseHeaders();
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+   //       resHeader.set("Authorization", loginRes.getAuthToken());
+          resBody.close();
+        }
+        else {
+          exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+          OutputStream resBody = exchange.getResponseBody();
+          WriteString.ws(resData, resBody);
+          resBody.close();
+        }
       }
     } catch (IOException | DataAccessException e) {
       exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);

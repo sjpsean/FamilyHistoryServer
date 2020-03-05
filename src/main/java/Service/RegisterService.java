@@ -8,6 +8,7 @@ import Generators.GenerateID;
 import Model.AuthToken;
 import Model.Person;
 import Model.User;
+import Requests.FillRequest;
 import Requests.RegisterRequest;
 import Response.RegisterResponse;
 
@@ -71,6 +72,8 @@ public class RegisterService {
       regRes = new RegisterResponse(e.getMessage(), false);
     }
 
+    fillGenerations(regReq.getUserName());
+
     return regRes;
   }
 
@@ -86,7 +89,7 @@ public class RegisterService {
       throw new DataAccessException(e.getMessage());
     }
     if (isReg) {
-      regRes = new RegisterResponse("This username is already registered in our server.", false);
+      regRes = new RegisterResponse("Error: This username is already registered in our server.", false);
     }
     return isReg;
   }
@@ -97,27 +100,27 @@ public class RegisterService {
    */
   private boolean checkValid() {
     if (regReq.getUserName().isEmpty()) {
-      regRes = new RegisterResponse("Username cannot be empty.", false);
+      regRes = new RegisterResponse("Error: invalid username", false);
       return false;
     }
     else if (regReq.getPassWord().isEmpty()) {
-      regRes = new RegisterResponse("Password cannot be empty.", false);
+      regRes = new RegisterResponse("Error: invalid password", false);
       return false;
     }
     else if (regReq.getEmail().isEmpty()) {
-      regRes = new RegisterResponse("Email address cannot be empty.", false);
+      regRes = new RegisterResponse("Error: invalid email address", false);
       return false;
     }
     else if (regReq.getFirstName().isEmpty()) {
-      regRes = new RegisterResponse("First name cannot be empty.", false);
+      regRes = new RegisterResponse("Error: invalid first name", false);
       return false;
     }
     else if (regReq.getLastName().isEmpty()) {
-      regRes = new RegisterResponse("Last name cannot be empty.", false);
+      regRes = new RegisterResponse("Error: invalid last name", false);
       return false;
     }
-    else if (regReq.getGender().isEmpty()) {
-      regRes = new RegisterResponse("Gender cannot be empty.", false);
+    else if (regReq.getGender().isEmpty() || !regReq.getGender().equals("m") && !regReq.getGender().equals("f")) {
+      regRes = new RegisterResponse("Error: invalid gender", false);
       return false;
     }
     else {
@@ -129,11 +132,11 @@ public class RegisterService {
    * use FillService class to fill 4 generations of ancestor data to this user.
    * returns Person object with the personID information that we need for the user.
    * @param userName string value from regReq.getUserName()
-   * @return Person object of the user
    */
-  private Person fillGenerations(String userName) {
-    // call FillService with a string from regReq.getUserName();
-    return null;
+  private void fillGenerations(String userName) throws DataAccessException {
+    FillRequest fillReq = new FillRequest(userName);
+    FillService fillService = new FillService(fillReq);
+    fillService.fill();
   }
 
 }

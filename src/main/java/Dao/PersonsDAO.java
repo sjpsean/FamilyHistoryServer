@@ -51,7 +51,7 @@ public class PersonsDAO {
       stmt.setString(1, personID);
       rs = stmt.executeQuery();
       if (rs.next()) {
-        person = new Person(rs.getString("PersonID"), rs.getString("AssociatedUsername"),
+        person = new Person(rs.getString("AssociatedUsername"), rs.getString("PersonID"),
                 rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Gender"),
                 rs.getString("FatherID"), rs.getString("MotherID"), rs.getString("SpouseID"));
         return person;
@@ -78,7 +78,7 @@ public class PersonsDAO {
       stmt.setString(1, userName);
       rs = stmt.executeQuery();
       while (rs.next()) {
-        person = new Person(rs.getString("PersonID"), rs.getString("AssociatedUsername"),
+        person = new Person(rs.getString("AssociatedUsername"), rs.getString("PersonID"),
                 rs.getString("FirstName"), rs.getString("LastName"), rs.getString("Gender"),
                 rs.getString("FatherID"), rs.getString("MotherID"), rs.getString("SpouseID"));
         personsList.add(person);

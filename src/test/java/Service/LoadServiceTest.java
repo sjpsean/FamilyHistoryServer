@@ -3,6 +3,7 @@ package Service;
 import Dao.*;
 import Model.*;
 import Requests.LoadRequest;
+import Response.LoadResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class LoadServiceTest {
     db = new Database();
     userSample = new User("Sean", "seanpassword", "seanpark@gmail.com",
             "Sean", "Park", "m", "personid123");
-    personSample = new Person("person123ID", "Sean", "Sean", "Park", "m",
+    personSample = new Person("Sean", "person123ID", "Sean", "Park", "m",
             "fatherParkID", "motherParkID", "SeanSpouseID");
     eventSample = new Event("eventID","SeanPark","personID1", 12.34f,56.78f,
             "Korea","Seoul","Birth",1997);
@@ -77,7 +78,7 @@ class LoadServiceTest {
         }
         rsPerson = stmt.executeQuery(sqlPerson);
         if (rsPerson.next()) {
-          comparePerson = new Person(rsPerson.getString("PersonID"), rsPerson.getString("AssociatedUsername"),
+          comparePerson = new Person(rsPerson.getString("AssociatedUsername"), rsPerson.getString("PersonID"),
                   rsPerson.getString("FirstName"), rsPerson.getString("LastName"), rsPerson.getString("Gender"),
                   rsPerson.getString("FatherID"), rsPerson.getString("MotherID"), rsPerson.getString("SpouseID"));
         }
@@ -102,5 +103,24 @@ class LoadServiceTest {
     assertEquals(compareUser, userSample);
     assertEquals(comparePerson, personSample);
     assertEquals(compareEvent, eventSample);
+  }
+
+
+  @Test
+  void loadFail() throws Exception {
+    LoadResponse loadResponse = null;
+
+    try {
+      Connection conn = db.openConnection();
+      LoadRequest loadRequest = new LoadRequest(null, null, null);
+      LoadService loadService = new LoadService(loadRequest);
+      loadResponse = loadService.load();
+      db.closeConnection(true);
+    } catch (DataAccessException e) {
+      db.closeConnection(false);
+    }
+
+    assertNotNull(loadResponse);
+    assertFalse(loadResponse.isSuccess());
   }
 }

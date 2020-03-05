@@ -26,7 +26,7 @@ public class Person {
    * @param motherID Person ID of person's mother (possibly null string)
    * @param spouseID Person ID of person's spouse (possibly null string)
    */
-  public Person(String personID, String associatedUsername, String firstName, String lastName,
+  public Person(String associatedUsername, String personID, String firstName, String lastName,
                 String gender, String fatherID, String motherID, String spouseID) {
     this.personID = personID;
     this.associatedUsername=associatedUsername;
